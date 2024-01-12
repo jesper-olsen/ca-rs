@@ -1,7 +1,7 @@
 ca-rs
 ==============
 
-One dimensional cellular autometa - the kind classified by Wolfram [1]. 
+One dimensional Cellular Autometa (CA) - the kind classified by Wolfram [1]. 
 You can specify the rule to use as well as the initial state.
 The CA's are assumed to be constrained to a width of 64 - this creates boundary effects that an infinite CA does not have. 
 
