@@ -55,7 +55,7 @@ fn main() {
             print!("{}", if state >> j & 1 == 1 { 'O' } else { '.' });
         }
         println!();
-        //state = apply_rule(state, args.r);
+        state = apply_rule(state, args.r);
         //state = (state >> 1) ^ (state | state << 1); // rule 30
         //state = (state >> 1) ^ (state << 1); // rule 90
     }
