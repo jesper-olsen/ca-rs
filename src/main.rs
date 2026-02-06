@@ -1,15 +1,35 @@
 use clap::Parser;
 
 #[derive(Parser, Debug)]
-#[command(author, version, about, long_about = None)]
+#[command(author, version, about = "Elementary Cellular Automaton Simulator")]
 struct Args {
-    #[arg(short, long="rule", default_value_t = 30)]
-    ///rule (0..255) 
-    r: u8,
+    #[arg(short, long, default_value_t = 30)]
+    ///rule (0..255)
+    rule: u8,
 
-    #[arg(short, long="state", default_value_t = String::from("0x80000000"))]
-    ///input (u64) - use binary (0b), octal (0o), hex (0x) or decimal notation
-    s: String,
+    #[arg(short, long, default_value = "0x80000000", value_parser = parse_prefixed_u64)]
+    /// Input (u64) - use binary (0b), octal (0o), hex (0x) or decimal notation
+    state: u64,
+
+    #[arg(short = 'S', long, default_value_t = 32)]
+    ///number of steps (0..)
+    steps: u8,
+}
+
+/// Custom parser for clap that handles Rust-style integer literals
+fn parse_prefixed_u64(s: &str) -> Result<u64, String> {
+    let (input, radix) = if let Some(stripped) = s.strip_prefix("0b") {
+        (stripped, 2)
+    } else if let Some(stripped) = s.strip_prefix("0x") {
+        (stripped, 16)
+    } else if let Some(stripped) = s.strip_prefix("0o") {
+        (stripped, 8)
+    } else {
+        (s, 10)
+    };
+
+    u64::from_str_radix(input.replace('_', "").as_str(), radix)
+        .map_err(|e| format!("Invalid number '{s}': {e}"))
 }
 
 fn apply_rule(state: u64, rule: u8) -> u64 {
@@ -22,10 +42,10 @@ fn apply_rule(state: u64, rule: u8) -> u64 {
 
         let neighbors = match i {
             0 => (center << 1) | right_neighbor,
-            63  => (left_neighbor << 2) | (center << 1),
+            63 => (left_neighbor << 2) | (center << 1),
             _ => (left_neighbor << 2) | (center << 1) | right_neighbor,
         };
-       
+
         let new_bit = (rule >> neighbors) & 1;
         new_state |= (new_bit as u64) << i;
     }
@@ -33,31 +53,24 @@ fn apply_rule(state: u64, rule: u8) -> u64 {
     new_state
 }
 
+#[inline]
+fn match_bit(val: u64, bit_expected: u8) -> u64 {
+    if bit_expected == 1 { val } else { !val }
+}
+
 fn main() {
     let args = Args::parse();
 
-    let s = if args.s.starts_with("0b") {
-        u64::from_str_radix(&args.s[2..], 2)
-    } else if args.s.starts_with("0o") {
-        u64::from_str_radix(&args.s[2..], 8)
-    } else if args.s.starts_with("0x") {
-        u64::from_str_radix(&args.s[2..], 16)
-    } else {
-        u64::from_str_radix(&args.s, 10)
-    };
-
     //let mut state = 1u64 << 31;
-    let mut state = s.expect("Failed to parse input");
+    let mut state = args.state;
 
-
-    for _ in 0..32 {
-        for j in 0..64 {
-            print!("{}", if state >> j & 1 == 1 { 'O' } else { '.' });
-        }
-        println!();
-        state = apply_rule(state, args.r);
+    for _ in 0..args.steps {
+        let row: String = (0..64)
+            .map(|i| if (state >> i) & 1 == 1 { 'O' } else { '.' })
+            .collect();
+        println!("{row}");
+        state = apply_rule(state, args.rule);
         //state = (state >> 1) ^ (state | state << 1); // rule 30
         //state = (state >> 1) ^ (state << 1); // rule 90
     }
 }
-
