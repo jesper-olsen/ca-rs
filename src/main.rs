@@ -1,7 +1,8 @@
 use clap::Parser;
+use std::{io, io::Write};
 
 #[derive(Parser, Debug)]
-#[command(author, version, about = "Elementary Cellular Automaton Simulator")]
+#[command(author, version, about = "Elementary Cellular Automaton (ECA) Simulator")]
 struct Args {
     #[arg(short, long, default_value_t = 30)]
     ///rule (0..255)
@@ -13,7 +14,7 @@ struct Args {
 
     #[arg(short = 'S', long, default_value_t = 32)]
     ///number of steps (0..)
-    steps: u8,
+    steps: usize,
 }
 
 /// Custom parser for clap that handles Rust-style integer literals
@@ -32,45 +33,46 @@ fn parse_prefixed_u64(s: &str) -> Result<u64, String> {
         .map_err(|e| format!("Invalid number '{s}': {e}"))
 }
 
+/// Applies the ECA rule using periodic (wrapping) boundary conditions
 fn apply_rule(state: u64, rule: u8) -> u64 {
-    let mut new_state = 0;
+    let mut new_state = 0u64;
 
     for i in 0..64 {
-        let left_neighbor = (state >> ((i + 63) % 64) & 1) as u8;
-        let center = (state >> i & 1) as u8;
-        let right_neighbor = (state >> ((i + 1) % 64) & 1) as u8;
+        // Use wrapping logic for periodic boundaries
+        let left = (state >> ((i + 1) % 64)) & 1;
+        let center = (state >> i) & 1;
+        let right = (state >> ((i + 63) % 64)) & 1;
 
-        let neighbors = match i {
-            0 => (center << 1) | right_neighbor,
-            63 => (left_neighbor << 2) | (center << 1),
-            _ => (left_neighbor << 2) | (center << 1) | right_neighbor,
-        };
+        // Combine neighbors into a 3-bit index (0-7)
+        let pattern = (left << 2) | (center << 1) | right;
 
-        let new_bit = (rule >> neighbors) & 1;
-        new_state |= (new_bit as u64) << i;
+        // Check if the bit at that index in the rule is 1
+        if (rule >> pattern) & 1 == 1 {
+            new_state |= 1 << i;
+        }
     }
 
     new_state
 }
 
-#[inline]
-fn match_bit(val: u64, bit_expected: u8) -> u64 {
-    if bit_expected == 1 { val } else { !val }
-}
-
-fn main() {
+fn main() -> io::Result<()> {
     let args = Args::parse();
-
-    //let mut state = 1u64 << 31;
     let mut state = args.state;
+    
+    // Use a buffered handle for faster terminal output
+    let mut stdout = io::BufWriter::new(io::stdout());
 
     for _ in 0..args.steps {
-        let row: String = (0..64)
-            .map(|i| if (state >> i) & 1 == 1 { 'O' } else { '.' })
-            .collect();
-        println!("{row}");
+        for i in (0..64).rev() {
+            let symbol = if (state >> i) & 1 == 1 { 'O' } else { '.' };
+            write!(stdout, "{symbol}")?;
+        }
+        writeln!(stdout)?;
         state = apply_rule(state, args.rule);
         //state = (state >> 1) ^ (state | state << 1); // rule 30
         //state = (state >> 1) ^ (state << 1); // rule 90
     }
+    
+    stdout.flush()?;
+    Ok(())
 }
