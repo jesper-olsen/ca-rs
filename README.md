@@ -1,10 +1,12 @@
 ca-rs
 ==============
 
-One dimensional Cellular Autometa (CA) - the kind classified by Wolfram [1]. 
+One dimensional Elementary Cellular Autometa (ECA) - the kind classified by Wolfram [1]. 
 You can specify the rule to use as well as the initial state.
-The CA's are assumed to be constrained to a width of 64 - this creates boundary effects that an infinite CA does not have. 
 
+There are two versions:
+* lite - minimal dependencies, constrained to a width of 64, ASCII output.
+* eca - arbitrary width, PNG/ASCII output
 
 References
 ----------
@@ -14,10 +16,10 @@ Run
 -----
 
 ```
-% cargo run --bin caascii -- --help
+% cargo run --bin lite -- --help
 Elementary Cellular Automaton (ECA) Simulator
 
-Usage: caascii [OPTIONS]
+Usage: lite [OPTIONS]
 
 Options:
   -r, --rule <RULE>    rule (0..255) [default: 30]
@@ -100,7 +102,7 @@ O.O.O.O.O.O.O.O.O.O.O.O.O.O.O.O.O.O.O.O.O.O.O.O.O.O.O.O.O.O.O.O.
 ```
 
 ```
-% cargo run -- --rule 90 --state 0b111111000000000000000000000000000
+% cargo run --bin lite -- --rule 90 --state 0b111111000000000000000000000000000
 ...........................OOOOOO...............................
 ..........................OO....OO..............................
 .........................OOOO..OOOO.............................
@@ -136,7 +138,7 @@ O..OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO..OO
 ```
 
 ```
-% cargo run --bin caascii -- --rule 110
+% cargo run --bin lite -- --rule 110
 ...............................O................................
 ..............................OO................................
 .............................OOO................................

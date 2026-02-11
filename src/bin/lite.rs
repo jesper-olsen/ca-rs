@@ -1,4 +1,5 @@
-//! 1D Cellular Automata - Generates ascii graphis
+//! 1D Cellular Automata - minimal dependencies, fixed width of 64
+//! Generates ascii output
 
 use clap::Parser;
 use std::{io, io::Write};
@@ -65,7 +66,7 @@ fn main() -> io::Result<()> {
     let args = Args::parse();
     let mut state = args.state;
 
-    // Use a buffered handle for faster terminal output
+    // faster terminal output
     let mut stdout = io::BufWriter::new(io::stdout());
 
     for _ in 0..args.steps {
@@ -74,9 +75,11 @@ fn main() -> io::Result<()> {
             write!(stdout, "{symbol}")?;
         }
         writeln!(stdout)?;
-        state = apply_rule(state, args.rule);
-        //state = (state >> 1) ^ (state | state << 1); // rule 30
-        //state = (state >> 1) ^ (state << 1); // rule 90
+        state = match args.rule {
+            30 => (state >> 1) ^ (state | state << 1), // fast path
+            90 => (state >> 1) ^ (state << 1),         // fast path
+            _ => apply_rule(state, args.rule),
+        };
     }
 
     stdout.flush()?;
