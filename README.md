@@ -14,18 +14,21 @@ Run
 -----
 
 ```
-% cargo run -- -h
-Usage: ca-rs [OPTIONS]
+% cargo run --bin caascii -- --help
+Elementary Cellular Automaton (ECA) Simulator
+
+Usage: caascii [OPTIONS]
 
 Options:
-  -r, --rule <R>   rule (0..255) [default: 30]
-  -s, --state <S>  input (u64) - use binary (0b), octal (0o), hex (0x) or decimal notation [default: 0x80000000]
-  -h, --help       Print help
-  -V, --version    Print version
+  -r, --rule <RULE>    rule (0..255) [default: 30]
+  -s, --state <STATE>  Input (u64) - use binary (0b), octal (0o), hex (0x) or decimal notation [default: 0x80000000]
+  -S, --steps <STEPS>  number of steps (0..) [default: 32]
+  -h, --help           Print help
+  -V, --version        Print version
 ```
 
 ```
-% cargo run -- --rule 30 
+% cargo run --bin caascii -- --rule 30 
 ...............................O................................
 ..............................OOO...............................
 .............................OO..O..............................
@@ -133,7 +136,7 @@ O..OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO..OO
 ```
 
 ```
-% cargo run -- --rule 110
+% cargo run --bin caascii -- --rule 110
 ...............................O................................
 ..............................OO................................
 .............................OOO................................
