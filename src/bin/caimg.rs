@@ -1,3 +1,5 @@
+//! 1D Cellular Automata - generates PNG images - arbitrary width/height
+
 use clap::Parser;
 use image::{ImageBuffer, Luma};
 use std::path::Path;
