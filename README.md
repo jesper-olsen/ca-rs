@@ -7,13 +7,13 @@ There are two versions:
 * lite - minimal dependencies, constrained to a width of 64, ASCII output.
 * eca - arbitrary width, PNG/ASCII output
 
-# References
+## References
 
 [1] Stephen Wolfram - A New Kind Of Science
 
-# Usage 
+## Usage 
 
-## Bin eca
+### Bin eca
 
 ```
 cargo run --bin eca -- --help
@@ -39,7 +39,7 @@ cargo run --bin eca -- --rule 110
 ![rule 110](rule110.png)
 
 
-## Bin lite 
+### Bin lite 
 
 ```
 cargo run --bin lite -- --help
