@@ -1,7 +1,8 @@
 ca-rs
+
 ==============
 
-One dimensional Elementary Cellular Autometa (ECA) - the kind classified by Wolfram [1]. 
+One dimensional Elementary Cellular Automata (ECA) - the kind classified by Wolfram [1]. 
 You can specify the rule to use as well as the initial state.
 
 There are two versions:
@@ -9,14 +10,19 @@ There are two versions:
 * eca - arbitrary width, PNG/ASCII output
 
 References
+
 ----------
+
 [1] Stephen Wolfram - A New Kind Of Science
 
-Run - eca
+Usage 
+
 -----
 
+### Bin eca
+
 ```
-% cargo run --bin eca -- --help
+cargo run --bin eca -- --help
 ECA to PNG Generator
 
 Usage: eca [OPTIONS]
@@ -39,11 +45,12 @@ cargo run --bin eca -- --rule 110
 ![rule 110](rule110.png)
 
 
-Run - lite
+### Bin lite 
+
 -----
 
 ```
-% cargo run --bin lite -- --help
+cargo run --bin lite -- --help
 Elementary Cellular Automaton (ECA) Simulator
 
 Usage: lite [OPTIONS]
@@ -57,7 +64,7 @@ Options:
 ```
 
 ```
-% cargo run --bin lite -- --rule 90
+cargo run --bin lite -- --rule 90
 ................................O...............................
 ...............................O.O..............................
 ..............................O...O.............................
