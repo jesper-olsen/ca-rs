@@ -12,7 +12,7 @@ References
 ----------
 [1] Stephen Wolfram - A New Kind Of Science
 
-Run
+Run - eca
 -----
 
 ```
@@ -37,6 +37,10 @@ cargo run --bin eca -- --rule 110
 
 ```
 ![rule 110](rule110.png)
+
+
+Run - lite
+-----
 
 ```
 % cargo run --bin lite -- --help
