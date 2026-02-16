@@ -1,4 +1,4 @@
-ca-rs
+# ca-rs
 
 ==============
 
@@ -15,11 +15,11 @@ References
 
 [1] Stephen Wolfram - A New Kind Of Science
 
-Usage 
+# Usage 
 
 -----
 
-### Bin eca
+## Bin eca
 
 ```
 cargo run --bin eca -- --help
@@ -45,7 +45,7 @@ cargo run --bin eca -- --rule 110
 ![rule 110](rule110.png)
 
 
-### Bin lite 
+## Bin lite 
 
 -----
 
