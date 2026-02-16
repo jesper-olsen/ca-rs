@@ -7,11 +7,14 @@ There are two versions:
 * lite - minimal dependencies, constrained to a width of 64, ASCII output.
 * eca - arbitrary width, PNG/ASCII output
 
+
 ## References
 
 [1] Stephen Wolfram - A New Kind Of Science
 
+
 ## Usage 
+
 
 ### Bin eca
 
